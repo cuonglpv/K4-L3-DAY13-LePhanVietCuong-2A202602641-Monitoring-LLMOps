@@ -1,0 +1,14 @@
+CP3 official incident metric
+Challenge ID: day13-k4-l3a-monitoring-llmops-v1
+Scenario: rag_slow
+Source: data/logs.jsonl; response_sent events for the five official challenge requests
+Time range (UTC): 2026-09-29T09:17:03.728234Z to 2026-09-29T09:17:14.392066Z
+
+Request count: 5
+SLO latency threshold: 2000 ms
+Latency values (ms): 2667, 2654, 2653, 2658, 2653
+P50 latency: 2654 ms
+P95 latency: 2667 ms
+Threshold breaches: 5/5
+
+Conclusion: latency SLO symptom is present in the official challenge interval.

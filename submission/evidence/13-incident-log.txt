@@ -1,0 +1,8 @@
+CP3 official incident log
+Challenge ID: day13-k4-l3a-monitoring-llmops-v1
+Selected correlation_id: req-f4a9e0cb
+
+{"event":"request_received","env":"dev","user_id_hash":"dc9b2ec8da9d","correlation_id":"req-f4a9e0cb","model":"claude-sonnet-4-5","session_id":"k4-l3a-challenge-s03","feature":"monitoring","level":"info","ts":"2026-09-29T09:17:01.031726Z"}
+{"event":"response_sent","latency_ms":2667,"ttft_ms":50,"tokens_in":35,"tokens_out":140,"cost_usd":0.002205,"quality_score":0.8,"tool_name":"retrieval","tool_success":true,"env":"dev","user_id_hash":"dc9b2ec8da9d","correlation_id":"req-f4a9e0cb","model":"claude-sonnet-4-5","session_id":"k4-l3a-challenge-s03","feature":"monitoring","level":"info","ts":"2026-09-29T09:17:03.728234Z"}
+
+The response took 2667 ms (> 2000 ms threshold) while retrieval itself succeeded. No raw PII is included.

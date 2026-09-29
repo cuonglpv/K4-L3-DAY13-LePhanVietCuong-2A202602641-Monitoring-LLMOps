@@ -9,7 +9,7 @@
 - **Lớp:** K4-L3A
 - **Repository URL:** https://github.com/cuonglpv/K4-L3-DAY13-LePhanVietCuong-2A202602641-Monitoring-LLMOps
 - **Commit SHA cuối:** Dùng SHA của `HEAD` tại thời điểm push/nộp bài.
-- **Challenge ID:**
+- **Challenge ID:** `day13-k4-l3a-monitoring-llmops-v1`
 - **Tên project Langfuse cá nhân:** `day13-k4-l3a-2A202602641`.
 
 ## 2. Evidence index
@@ -31,9 +31,9 @@
 | Prompt rollback | `evidence/10-prompt-promote-v3.png`, `evidence/10-prompt-rollback.png`, `evidence/10-prompt-production-v3.txt`, `evidence/10-prompt-rollback-v1.txt` |
 | Dashboard runtime | `evidence/11-dashboard-overview.png`, `evidence/11-dashboard-runtime-cp2.txt` |
 | Practice `rag_slow` (không phải CP3 official) | `evidence/15-practice-rag-slow.txt` |
-| Incident metric | Chưa có — chờ challenge file chính thức |
-| Incident log | Chưa có — chờ challenge file chính thức |
-| Incident trace | Chưa có — chờ challenge file chính thức |
+| Incident metric | `evidence/12-incident-metric.txt` |
+| Incident log | `evidence/13-incident-log.txt` |
+| Incident trace | `evidence/14-incident-trace.txt` |
 
 ## 3. Kết quả kỹ thuật
 
@@ -74,30 +74,29 @@
 
 ## 7. Điều tra challenge
 
-- **Challenge ID:** Chưa có — `config/challenge.json` chưa được Lab Coach release vào workspace, nên không tự tạo hoặc dùng file lớp khác.
-- **Khoảng thời gian điều tra:** Chưa thực hiện official challenge. Practice riêng `rag_slow` chạy 08:02:43Z–08:02:46Z và được lưu riêng tại `evidence/15-practice-rag-slow.txt`.
-- **Triệu chứng từ metrics:** Practice có latency P95 2655 ms, TTFT P95 52 ms. Không dùng số liệu này làm evidence challenge chính thức.
-- **Log line và correlation ID liên quan:** Practice `req-c3a00001` có `request_received` và `response_sent`; response có `latency_ms=2655`, `tool_name=retrieval`, `tool_success=true`.
-- **Trace ID và span gây ảnh hưởng:** Chưa có trace cá nhân vì Cloud chưa cấu hình. Khi bật trace, dự kiến đối chiếu child `retrieval` với generation; chưa được coi là kết luận official.
-- **Root cause:** Official: chưa kết luận khi chưa có metric → log → trace của challenge. Practice: scenario `rag_slow` thêm delay 2.5 giây vào retrieval, phù hợp với latency cao nhưng TTFT thấp.
-- **Fix action:** Official: chờ evidence challenge thực tế. Practice: giảm/timeout retrieval chậm hoặc fallback an toàn, rồi xác nhận P95 hồi phục.
-- **Preventive measure:** Alert/runbook CP2 đã chuẩn bị cho symptom latency, error/retrieval và cost.
+- **Challenge ID và scenario:** `day13-k4-l3a-monitoring-llmops-v1`, incident `rag_slow`, seed `1311`. File chính thức được đặt nguyên trạng tại `config/challenge.json` và bị `.gitignore`; không được commit.
+- **Metrics:** Trong khoảng `2026-09-29T09:17:03.728234Z`–`2026-09-29T09:17:14.392066Z`, năm response challenge có latency `2667, 2654, 2653, 2658, 2653 ms`; P95 là `2667 ms`, vượt threshold/SLO `2000 ms` ở 5/5 request. Xem `evidence/12-incident-metric.txt`.
+- **Logs:** Chọn `correlation_id=req-f4a9e0cb`. Log `response_sent` có `latency_ms=2667`, `tool_name=retrieval`, `tool_success=true`, feature `monitoring` và timestamp `2026-09-29T09:17:03.728234Z`. Xem `evidence/13-incident-log.txt`.
+- **Traces:** Trace Langfuse cùng correlation ID là `cfcb65492fdf841134f6568a06116586`. Root `lab-agent-run` mất `2.673 s`; child `retrieval` mất `2.504 s`, trong khi `llm.generate` chỉ `0.152 s` (TTFT `0.050 s`). Parent-child và IDs cụ thể nằm ở `evidence/14-incident-trace.txt`.
+- **Root cause:** `rag_slow` làm chậm retrieval. Retrieval chiếm khoảng 94% root duration, trong khi generation ngắn; vì vậy đây là retrieval latency chứ không phải model generation hay request error.
+- **Fix action:** Đặt timeout/deadline cho retrieval, sử dụng cache hoặc fallback an toàn khi hết deadline, và tách blocking retrieval khỏi worker request. Sau khi áp dụng cần chạy lại official workload để xác nhận P95 về dưới `2000 ms`.
+- **Preventive measure:** Giữ alert `latency_slo_burn` (P95 > 2000 ms) và bổ sung breakdown latency theo span/feature trong dashboard; runbook bắt đầu bằng log correlation ID rồi mở trace waterfall để giảm thời gian chẩn đoán.
 
 ## 8. Giải thích và tự đánh giá
 
 - **Một quyết định kỹ thuật quan trọng và lý do:** Scrub PII theo đệ quy trên toàn event thay vì chỉ `payload`; như vậy field mới hoặc nested exception không vô tình đi qua file writer/JSON renderer mà không che dữ liệu.
-- **Một lỗi/blocker đã gặp:** Lần cài dependency đầu bị sandbox chặn mạng; sau khi được cấp quyền cài requirements, dependency đã sẵn sàng. Trình browser evidence cũng lỗi khởi tạo local helper, nên CP2 lưu output endpoint thay vì ảnh và ghi rõ hạn chế này.
+- **Một lỗi/blocker đã gặp:** Lần cài dependency đầu bị sandbox chặn mạng; sau khi được cấp quyền cài requirements, dependency đã sẵn sàng. Endpoint Observations API v1 của Langfuse trả `410`, nên chuyển sang Observations API v2 có time range và chỉ dùng fields cần thiết.
 - **Cách tìm nguyên nhân và xử lý:** Validator baseline báo missing correlation/enrichment, đối chiếu các TODO rồi sửa middleware/context logging. Sau khi lưu baseline, xóa JSONL cũ và chạy workload mới; validator đạt 100/100.
 - **Cách hiểu luồng Metrics → Logs → Traces:** Metrics/dashboard chỉ ra triệu chứng và khung thời gian. JSONL log lọc theo event/latency/error để chọn request có `correlation_id`. Metadata trace cùng ID mở waterfall để so sánh retrieval với generation, từ đó kết luận span/root cause thay vì đoán từ metric.
 - **Vai trò của prompt version, token/cost, SLO hoặc rollback trong vận hành LLM:** Prompt name/version/label làm request có thể tái hiện; label cho phép promote/rollback không đổi code. Token/cost chỉ ra tác động tài chính của generation. SLO/error budget biến latency/error thành cam kết đo được, còn alert kích hoạt điều tra trước khi budget cạn.
 - **Điều quan trọng nhất đã học:** Correlation ID chỉ có ích khi được bind ở ranh giới request, ghi log có cấu trúc và được đưa vào trace metadata cùng một cách.
-- **Hạn chế hoặc phần chưa hoàn thành, nếu có:** Baseline/candidate/promotion/rollback trace đã có, nhưng vẫn cần screenshot UI Langfuse thấy tên project, version và labels. CP3 vẫn chờ challenge file riêng do Lab Coach release. Không dùng fake evidence thay thế các phần này.
+- **Hạn chế hoặc phần chưa hoàn thành, nếu có:** CP3 đã chạy bằng file challenge chính thức; evidence 12–14 hiện là output text đã scrub. Có thể bổ sung ảnh dashboard/Langfuse UI nếu rubric yêu cầu ảnh thay vì output text, nhưng không chụp API Keys hoặc dữ liệu nhạy cảm.
 
 ## 9. Checklist trước khi nộp
 
 - [ ] Kết quả và evidence thuộc commit SHA cuối.
 - [ ] Tất cả ảnh/output mở được bằng đường dẫn tương đối.
-- [ ] Incident evidence nối đúng metric → log → trace.
+- [x] Incident evidence nối đúng metric → log → trace.
 - [ ] Trace/prompt evidence thuộc project Langfuse cá nhân và ảnh không lộ key/secret.
 - [ ] Repository chạy lại được theo README.
 - [ ] Không có secret, API key, PII thô hoặc evidence của người khác/lớp khác.

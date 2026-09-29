@@ -1,0 +1,13 @@
+CP3 official incident trace
+Challenge ID: day13-k4-l3a-monitoring-llmops-v1
+Source: Langfuse Observations API v2, project day13-k4-l3a-2A202602641
+Correlation ID: req-f4a9e0cb
+Trace ID: cfcb65492fdf841134f6568a06116586
+
+Observation tree (all durations in seconds):
+- lab-agent-run, type AGENT, observation ID f10861ad09ea19d5, parent null, latency 2.673
+  - retrieval, type RETRIEVER, observation ID d3d50e2afa91305c, parent f10861ad09ea19d5, latency 2.504
+  - llm.generate, type GENERATION, observation ID f2262cdd83004391, parent f10861ad09ea19d5, latency 0.152, TTFT 0.050
+
+Shared sanitized metadata: correlation_id=req-f4a9e0cb; feature=monitoring; model=claude-sonnet-4-5; prompt_name=day13-chat; prompt_label=production; prompt_version=1.
+Conclusion: the retrieval child accounts for about 94% of root duration; generation is not the latency driver.
