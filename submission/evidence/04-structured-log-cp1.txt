@@ -1,0 +1,25 @@
+CP1 structured-log evidence — 2026-09-29 (Asia/Saigon)
+
+The following request_received record was written after CP1. It shows UTC
+timestamp, level, API service, correlation ID, hashed user ID, session,
+feature, model, and environment.
+
+{
+  "service": "api",
+  "payload": {
+    "message_preview": "Contact [REDACTED_EMAIL] at [REDACTED_PHONE_VN]; CCCD [REDACTED_CCCD]; card [RED..."
+  },
+  "event": "request_received",
+  "user_id_hash": "8ba15d806774",
+  "model": "claude-sonnet-4-5",
+  "feature": "qa",
+  "env": "dev",
+  "session_id": "session-cp1",
+  "correlation_id": "req-a1b2c3d4",
+  "level": "info",
+  "ts": "2026-09-29T07:41:51.372315Z"
+}
+
+HTTP response headers for the same request
+- x-request-id: req-a1b2c3d4
+- x-response-time-ms: 735.68

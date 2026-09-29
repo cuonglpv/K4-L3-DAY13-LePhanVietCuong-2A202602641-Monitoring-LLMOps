@@ -1,0 +1,13 @@
+CP1 PII-redaction evidence — 2026-09-29 (Asia/Saigon)
+
+A request containing synthetic test values for an email address, Vietnamese
+phone number, CCCD, and payment-card number was sent with correlation ID
+req-a1b2c3d4. The persisted request_received log contains only these markers:
+
+- [REDACTED_EMAIL]
+- [REDACTED_PHONE_VN]
+- [REDACTED_CCCD]
+- [REDACTED_CREDIT_CARD]
+
+The validator examined all 23 new JSONL records and reported 0 potential PII
+leaks. The complete safe log record is in 04-structured-log-cp1.txt.
