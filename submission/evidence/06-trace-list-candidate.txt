@@ -1,0 +1,11 @@
+CP2 Langfuse candidate trace verification — 2026-09-29 (Asia/Saigon)
+
+After LANGFUSE_PROMPT_LABEL=candidate and a new ten-request workload, the
+Langfuse Observations API returned ten recent AGENT roots. Each candidate trace
+contains a RETRIEVER child and a GENERATION child.
+
+Example candidate trace ID: 3062d3a9ebdf8240fa81b368a2ff8569
+
+This SDK/API evidence is from the configured personal project. Before
+submission, capture the project UI showing the name, candidate trace list, and
+the waterfall; do not open or capture API Keys.

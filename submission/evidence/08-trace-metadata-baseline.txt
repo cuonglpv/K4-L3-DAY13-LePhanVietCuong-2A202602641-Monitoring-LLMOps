@@ -1,0 +1,21 @@
+CP2 Langfuse baseline trace metadata — 2026-09-29 (Asia/Saigon)
+
+Trace ID: b9f5a0d7e0a2c0189c1755722439322e
+Correlation ID: req-96db205a
+
+Observation hierarchy
+- AGENT lab-agent-run (root)
+- RETRIEVER retrieval (child of root)
+- GENERATION llm.generate (child of root)
+
+Prompt and generation verification
+- prompt_name: day13-chat
+- prompt_label: baseline
+- prompt_version: 1
+- prompt_source: langfuse
+- model: claude-sonnet-4-5
+- usage: input=28, output=92, total=120
+- cost USD: input=0.000084, output=0.001380, total=0.001464
+
+The API query requested metadata/model/usage/prompt field groups only. No raw
+prompt or output was captured in this evidence.

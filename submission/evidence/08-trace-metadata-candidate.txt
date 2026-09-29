@@ -1,0 +1,17 @@
+CP2 Langfuse candidate trace metadata — 2026-09-29 (Asia/Saigon)
+
+Trace ID: 3062d3a9ebdf8240fa81b368a2ff8569
+Correlation ID: req-b4d93c3b
+
+Verification
+- root: AGENT lab-agent-run
+- child observations: RETRIEVER retrieval; GENERATION llm.generate
+- prompt_name: day13-chat
+- prompt_label: candidate
+- prompt_version: 3
+- prompt_source: langfuse
+- generation model: claude-sonnet-4-5
+- usage: input=38, output=119, total=157
+- cost USD: input=0.000114, output=0.001785, total=0.001899
+
+No raw prompt or model output is included in this evidence.

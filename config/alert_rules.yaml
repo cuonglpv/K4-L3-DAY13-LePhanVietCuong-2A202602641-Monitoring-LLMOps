@@ -1,25 +1,25 @@
 alerts:
-  - name: TODO_alert_1
-    severity: TODO
-    condition: TODO
-    duration: TODO
+  - name: latency_slo_burn
+    severity: critical
+    condition: P95 response latency is greater than 2000 ms
+    duration: 5m
     type: symptom-based
-    channel: slack
-    owner: TODO
+    channel: slack:#day13-llmops-alerts
+    owner: LLMOps on-call
     runbook: docs/alerts.md#alert-1
-  - name: TODO_alert_2
-    severity: TODO
-    condition: TODO
-    duration: TODO
+  - name: request_failure_or_retrieval_degradation
+    severity: warning
+    condition: Error rate is greater than 2% or retrieval success rate is below 90%
+    duration: 5m
     type: symptom-based
-    channel: slack
-    owner: TODO
+    channel: slack:#day13-llmops-alerts
+    owner: API on-call
     runbook: docs/alerts.md#alert-2
-  - name: TODO_alert_3
-    severity: TODO
-    condition: TODO
-    duration: TODO
+  - name: daily_cost_guardrail
+    severity: warning
+    condition: Accumulated cost is greater than 2.5 USD in the rolling 24-hour window
+    duration: 15m
     type: symptom-based
-    channel: slack
-    owner: TODO
+    channel: slack:#day13-llmops-alerts
+    owner: FinOps on-call
     runbook: docs/alerts.md#alert-3

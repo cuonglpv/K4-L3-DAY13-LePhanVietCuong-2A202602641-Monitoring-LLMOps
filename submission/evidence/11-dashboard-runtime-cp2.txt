@@ -1,0 +1,31 @@
+CP2 dashboard runtime — 2026-09-29 (Asia/Saigon)
+
+Runtime URL
+http://127.0.0.1:8000/dashboard
+
+The endpoint returned HTTP 200 and rendered all six required panels from
+data/logs.jsonl, with a 60-minute time range, 30-second refresh, units and
+thresholds. Browser screenshot capture was unavailable because the local
+computer-use helper failed to initialize; this is a faithful text capture of
+the endpoint and source aggregation, not a substitute for a final visual
+screenshot.
+
+Six panel titles confirmed
+- Latency percentiles and TTFT
+- Request traffic
+- Error rate and retrieval success
+- Cost over time
+- Input and output tokens
+- Quality proxy
+
+Source aggregation from 44 JSONL records
+- latency P50/P95/P99: 151/152/152 ms
+- TTFT P95: 50 ms
+- request count/rate: 21 / 0.35 requests per minute (60-minute window)
+- error rate/retrieval success: 0.00% / 100.00%
+- total cost: 0.041472 USD
+- input/output tokens: 719 / 2621
+- mean quality: 0.8762
+
+Contract validator
+HOP LE: 6/6 panel co trong dashboard contract.

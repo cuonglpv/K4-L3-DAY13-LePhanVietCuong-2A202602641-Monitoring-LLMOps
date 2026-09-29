@@ -1,0 +1,22 @@
+CP2 prompt rollback verification — 2026-09-29 (Asia/Saigon)
+
+After production was moved back to prompt version 1, the app was restarted to
+clear the prompt cache and a new ten-request workload was sent with
+LANGFUSE_PROMPT_LABEL=production.
+
+Trace ID: 94da70989524b5694f47c8831ae95cab
+Correlation ID: req-06be0c51
+
+Langfuse metadata verification
+- prompt_name: day13-chat
+- prompt_label: production
+- prompt_version: 1
+- prompt_source: langfuse
+- root: AGENT lab-agent-run
+- child observations: RETRIEVER retrieval; GENERATION llm.generate
+
+The same production label was confirmed first at version 3
+(43655f71ca38e1b6d4cf945a47da83a6) and then at version 1, demonstrating a
+promotion followed by rollback. Before submission, add a Langfuse UI screenshot
+that shows v1 with production/baseline and v3 with candidate; do not include API
+Keys.

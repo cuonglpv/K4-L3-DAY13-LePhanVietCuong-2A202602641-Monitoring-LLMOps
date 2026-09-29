@@ -28,6 +28,32 @@ class RecordingLangfuseClient:
         self.span_updates.append(kwargs)
 
 
+class RecordingObservation:
+    def __init__(self, kwargs: dict) -> None:
+        self.kwargs = kwargs
+        self.updates: list[dict] = []
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, *args) -> None:
+        return None
+
+    def update(self, **kwargs) -> None:
+        self.updates.append(kwargs)
+
+
+class ChildObservationClient(RecordingLangfuseClient):
+    def __init__(self) -> None:
+        super().__init__()
+        self.observations: list[RecordingObservation] = []
+
+    def start_as_current_observation(self, **kwargs) -> RecordingObservation:
+        observation = RecordingObservation(kwargs)
+        self.observations.append(observation)
+        return observation
+
+
 def test_agent_records_prompt_version_with_v4_observation_api(monkeypatch) -> None:
     monkeypatch.setenv("LANGFUSE_PROMPT_NAME", "day13-chat")
     monkeypatch.setenv("LANGFUSE_PROMPT_LABEL", "production")
@@ -67,3 +93,28 @@ def test_agent_records_prompt_version_with_v4_observation_api(monkeypatch) -> No
     assert span_update["version"] == "3"
     assert propagated[0]["metadata"]["correlation_id"] == "req-12345678"
     assert propagated[-1]["prompt"] is client.prompt
+
+
+def test_agent_creates_retrieval_and_generation_children(monkeypatch) -> None:
+    client = ChildObservationClient()
+    monkeypatch.setattr(agent_module, "get_langfuse_client", lambda: client)
+    monkeypatch.setattr(agent_module, "tracing_enabled", lambda: True)
+
+    agent = agent_module.LabAgent()
+    agent_module.LabAgent.run.__wrapped__(
+        agent,
+        user_id="student-01",
+        feature="qa",
+        session_id="session-01",
+        message="Explain traces",
+        correlation_id="req-12345678",
+    )
+
+    retrieval, generation = client.observations
+    assert retrieval.kwargs["as_type"] == "retriever"
+    assert retrieval.kwargs["name"] == "retrieval"
+    assert retrieval.updates[-1]["output"]["doc_count"] == 1
+    assert generation.kwargs["as_type"] == "generation"
+    assert generation.kwargs["model"] == "claude-sonnet-4-5"
+    assert generation.updates[-1]["usage_details"]["input"] > 0
+    assert generation.updates[-1]["cost_details"]["total"] > 0

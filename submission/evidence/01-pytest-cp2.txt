@@ -1,0 +1,9 @@
+CP2 local verification — 2026-09-29 (Asia/Saigon)
+
+Command
+.venv\\Scripts\\python.exe -m pytest -q
+
+Result
+26 passed in 3.82s
+
+This includes the child-observation and JSONL-dashboard tests added in CP2.

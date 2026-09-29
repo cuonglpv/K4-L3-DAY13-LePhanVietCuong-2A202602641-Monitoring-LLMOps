@@ -1,0 +1,21 @@
+CP2 Langfuse baseline trace verification — 2026-09-29 (Asia/Saigon)
+
+After LANGFUSE_PROMPT_LABEL=baseline and a new ten-request workload, the
+Langfuse Observations API returned 30 observations: 10 logical traces, each
+with one AGENT root, one RETRIEVER child, and one GENERATION child.
+
+Trace IDs returned (10)
+- b9f5a0d7e0a2c0189c1755722439322e
+- 45d55b63ec674ba93c011b9c29492d23
+- e4f11c8d7f7ae9b203149f9275f283fe
+- 9cb87f97d9a16d8fa91798e0b3062bdb
+- f6b29d6a054cf439ffbb6043dae5a032
+- 2554b571c67006c6fe330df2a8945462
+- b8bc2066c858f5d343320cb7944d2f57
+- 6135841c5816e77fd06f903b37ccf697
+- 41625dc517d1d12a42f7602583b3c01e
+- 7b15faa687361feda262b6b763f69753
+
+This is SDK/API evidence from the configured personal project. Before
+submission, capture the project UI showing its name and the trace list; do not
+open or capture API Keys.

@@ -3,11 +3,15 @@ primary_slo:
   name: fast_successful_requests
   window: 28d
   sli:
-    good_event: 'event == "response_sent" and latency_ms <= 3000'
+    good_event: 'event == "response_sent" and latency_ms <= 2000'
     total_event: 'event == "request_received"'
   target_percent: 99.5
   error_budget_percent: 0.5
-  note: Học viên phải giải thích hoặc điều chỉnh ngưỡng bằng baseline của mình.
+  note: >-
+    CP1 baseline P95 was about 151 ms. The 2000 ms objective leaves room for
+    normal variation while detecting the simulated slow-retrieval path (about
+    2650 ms) before it consumes the 0.5% 28-day error budget. At 1,000
+    requests, the budget permits at most 5 requests outside the SLI.
 guardrails:
   error_rate_pct_max: 2
   daily_cost_usd_max: 2.5
