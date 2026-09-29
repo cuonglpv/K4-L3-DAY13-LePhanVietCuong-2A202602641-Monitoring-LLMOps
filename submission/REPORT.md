@@ -56,13 +56,13 @@
 
 ## 5. Tracing và prompt versioning
 
-- **Cách xác nhận traces do chính tôi tạo trong project cá nhân:** Sau khi cấu hình key riêng và `LANGFUSE_PROMPT_LABEL=baseline`, workload mới tạo 10 trace/30 observations được API xác nhận. Danh sách ID ở `evidence/06-trace-list-baseline.txt`; trước khi nộp vẫn cần screenshot UI thấy tên project cá nhân.
+- **Cách xác nhận traces do chính tôi tạo trong project cá nhân:** Sau khi cấu hình key riêng và `LANGFUSE_PROMPT_LABEL=baseline`, workload mới tạo 10 trace/30 observations được API xác nhận. Danh sách ID ở `evidence/06-trace-list-baseline.txt`; screenshot UI có breadcrumb project cá nhân ở `evidence/06-trace-list.png`.
 - **Cấu trúc root/retrieval/generation observations:** Root `lab-agent-run` (agent) do `@observe` tạo; bên trong có child `retrieval` loại `retriever` và `llm.generate` loại `generation`. Generation lưu model, prompt managed (nếu có), usage input/output/total, cost input/output/total, TTFT và output preview đã scrub.
 - **Cách nối trace với log:** `correlation_id` được đưa vào trace metadata qua `propagate_attributes`, đồng thời là context field trong log JSONL. Khi có incident, lọc log lấy ID rồi tìm metadata cùng ID trong Langfuse.
 - **Prompt name:** `day13-chat` (cấu hình trong `.env.example`).
 - **Version/label baseline:** Version 1, label `baseline`; trace `b9f5a0d7e0a2c0189c1755722439322e` xác nhận `prompt_source=langfuse`.
 - **Version/label candidate:** Version 3, label `candidate`; trace `3062d3a9ebdf8240fa81b368a2ff8569` xác nhận `prompt_source=langfuse`.
-- **Trace ID của mỗi version:** Baseline v1: `b9f5a0d7e0a2c0189c1755722439322e`; candidate v3: `3062d3a9ebdf8240fa81b368a2ff8569`; production promotion/rollback chưa chạy.
+- **Trace ID của mỗi version:** Baseline v1: `b9f5a0d7e0a2c0189c1755722439322e`; candidate v3: `3062d3a9ebdf8240fa81b368a2ff8569`; production v3: `43655f71ca38e1b6d4cf945a47da83a6`; rollback production v1: `94da70989524b5694f47c8831ae95cab`.
 - **Cách promote và rollback `production`:** Production đã được chuyển sang v3 và trace `43655f71ca38e1b6d4cf945a47da83a6` xác nhận version 3. Sau đó production được rollback về v1; trace `94da70989524b5694f47c8831ae95cab` xác nhận label `production`, version 1. App được restart giữa hai workload để bỏ cache prompt.
 
 ## 6. Dashboard, SLO và alerts
@@ -94,10 +94,10 @@
 
 ## 9. Checklist trước khi nộp
 
-- [ ] Kết quả và evidence thuộc commit SHA cuối.
-- [ ] Tất cả ảnh/output mở được bằng đường dẫn tương đối.
+- [x] Kết quả và evidence thuộc commit SHA cuối.
+- [x] Tất cả ảnh/output mở được bằng đường dẫn tương đối.
 - [x] Incident evidence nối đúng metric → log → trace.
-- [ ] Trace/prompt evidence thuộc project Langfuse cá nhân và ảnh không lộ key/secret.
-- [ ] Repository chạy lại được theo README.
-- [ ] Không có secret, API key, PII thô hoặc evidence của người khác/lớp khác.
+- [x] Trace/prompt evidence thuộc project Langfuse cá nhân và ảnh không lộ key/secret.
+- [x] Repository chạy lại được theo README.
+- [x] Không có secret, API key, PII thô hoặc evidence của người khác/lớp khác.
 - [ ] URL repo và commit SHA cuối đã được nộp trên LMS/Codelabs.
