@@ -1,0 +1,27 @@
+CP0 baseline — 2026-09-29 (Asia/Saigon)
+
+Environment
+- Python 3.12.10; .venv created and requirements.txt installed.
+- .env was created from .env.example. Langfuse credentials were intentionally not
+  recorded in this evidence; they were not configured at baseline.
+
+Health response
+{"ok":true,"tracing_enabled":false,"incidents":{"rag_slow":false,"tool_fail":false,"cost_spike":false}}
+
+Baseline workload
+- python scripts/load_test.py: 10 requests returned HTTP 200.
+- Before CP1, correlation_id was MISSING by design in the starter code.
+
+Baseline validators
+- python scripts/validate_logs.py: Estimated Score: 30/100
+  - missing required fields: 20
+  - missing enrichment: 20
+  - unique correlation IDs: 0
+  - PII leaks: 0
+- python scripts/validate_dashboard.py: HOP LE: 6/6 panel co trong dashboard contract.
+- python -m pytest -q: 22 passed in 2.18s.
+
+CP0 status
+- Local baseline completed and recorded before CP1 changes.
+- Langfuse trace evidence remains pending the student's personal Cloud project and
+  credentials; no shared project or key is used.
