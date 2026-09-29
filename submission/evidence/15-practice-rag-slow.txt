@@ -1,0 +1,26 @@
+CP3 practice only — 2026-09-29 (Asia/Saigon)
+
+This is not official challenge evidence. No config/challenge.json was created,
+read, or changed. The practice scenario was explicitly enabled via the local
+control endpoint on port 8001 and then disabled again.
+
+Scenario
+- rag_slow
+- correlation_id: req-c3a00001
+- time interval: 2026-09-29T08:02:43Z to 2026-09-29T08:02:46Z
+
+Metrics from the app after five slow practice requests
+- latency P50/P95/P99: 2651/2655/2655 ms
+- TTFT P95: 52 ms
+- error breakdown: none
+
+Structured logs for req-c3a00001
+- request_received at 08:02:43Z
+- response_sent at 08:02:46Z with latency_ms=2655, ttft_ms=50,
+  tool_name=retrieval, tool_success=true
+
+Interpretation
+The latency increase occurs outside first-token generation time. The source
+scenario adds a 2.5-second delay to retrieval, so the child `retrieval`
+observation is the expected span to confirm once traces are enabled. This must
+not be submitted as a replacement for the official CP3 challenge.
